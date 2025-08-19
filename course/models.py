@@ -25,6 +25,10 @@ class Course(models.Model):
 class CoursePurchase(models.Model):
     student = models.ForeignKey(User,on_delete=models.CASCADE,limit_choices_to={'role':'student'},related_name='purchases')
     course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name='purchases')
+    purchased_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student','course')
 
 
     def __str__(self):

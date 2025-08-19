@@ -50,6 +50,24 @@ class CreateDepartMentSerializerUserOrTeacher(serializers.ModelSerializer):
         model = Department
         fields = ['id','name']
         read_only_fields = fields
+
+
+class CoursePurchaseSerializer(serializers.ModelSerializer):
+    student_email = serializers.EmailField(source='student.email', read_only=True)
+    student_name = serializers.EmailField(source='student.first_name', read_only=True)
+    course_title = serializers.CharField(source='course.title', read_only=True)
+    class Meta:
+        model = CoursePurchase
+        fields = ['id','student_email','student_name','course_title','purchased_at']
+        read_only_fields = ['id','student_email','student_name','course_title']
+
+    def create(self,validated_data):
+        student = self.context['request'].user
+        course = validated_data['course']
+        if CoursePurchase.objects.filter(student=student,course=course).exists():
+            raise serializers.ValidationError('You have already purchase this course')
+        validated_data['student'] = student
+        return super().create(validated_data)
        
     
 
