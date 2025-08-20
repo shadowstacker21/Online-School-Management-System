@@ -58,7 +58,7 @@ class CoursePurchaseSerializer(serializers.ModelSerializer):
     course_title = serializers.CharField(source='course.title', read_only=True)
     class Meta:
         model = CoursePurchase
-        fields = ['id','student_email','student_name','course_title','purchased_at']
+        fields = ['id','student_email','student_name','course','course_title','purchased_at']
         read_only_fields = ['id','student_email','student_name','course_title']
 
     def create(self,validated_data):

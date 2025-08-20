@@ -7,15 +7,22 @@ from users.serializers import UserSerializer,RoleChangeSerializer
 from rest_framework.decorators import action
 from api.permissions import IsAdminOnly
 
-# Create your views here.
+
 
 class ChangeUserRoleView(ModelViewSet):
+    """
+   API endpoint for managing Role in the online school
+     - Allow authenticated  admin to change role
+     - Allows only admin can view every user role
+    
+   """
+
     queryset = User.objects.all()
     serializer_class = RoleChangeSerializer
     permission_classes = [IsAdminOnly]
-    http_method_names = ['get','post']
+    http_method_names = ['get','put']
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['put'])
     def change_role(self,request,pk=None):
         user = self.get_object()
         new_role = request.data.get('role')
@@ -28,6 +35,4 @@ class ChangeUserRoleView(ModelViewSet):
         return Response({"message": f"{user.first_name} {old_role} changed to {new_role}"}, status=status.HTTP_200_OK)
 
    
-        
-        
         

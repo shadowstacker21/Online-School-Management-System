@@ -7,13 +7,20 @@ from course.paginatons import DefaultPagination
 from course.filters import CourseFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 
 
 
 class CourseViewSet(ModelViewSet):
+    """
+   API endpoint for managing course in the project
+     - Allow authenticated  admin  to create, update, and delete all course
+     - Allow only teacher update their own course
+     - Allows users to browse and filter course by department name
+     - Student can view all course and purchase
+     - Only admin can delete purchase course
+   """
     permission_classes = [IsAdminOrTeacherOwner]
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend,SearchFilter]
@@ -45,6 +52,13 @@ class CourseViewSet(ModelViewSet):
 
 
 class DepartmentView(ModelViewSet):
+    """
+   API endpoint for managing departmentin the project
+     - Allow authenticated  admin to create, update, and delete department
+     - Allows authenticated admin only view deprtament
+     
+     
+   """
     queryset = Department.objects.all()
     permission_classes = [IsAdminOnly]
 
@@ -55,6 +69,12 @@ class DepartmentView(ModelViewSet):
     
 
 class CoursePurchaseView(ModelViewSet):
+    """
+   API endpoint for managing purchase course in the online school project
+     - Allow authenticated  admin to view all purchases course
+     - only student can purchase course and view their own course
+    
+   """
     serializer_class = CoursePurchaseSerializer
     permission_classes = [IsAdminOrStudentPurchase]
 

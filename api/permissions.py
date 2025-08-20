@@ -25,8 +25,8 @@ class IsAdminOrTeacherOwner(permissions.BasePermission):
     
 class IsAdminOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
+        # if request.method in permissions.SAFE_METHODS:
+        #     return True
         if request.user.role == "admin":
             return True
         

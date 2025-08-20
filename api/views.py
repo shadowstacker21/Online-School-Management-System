@@ -4,11 +4,22 @@ from rest_framework.views import APIView
 from api.permissions import IsAdminOnlyDashboard
 from datetime import timedelta
 from django.utils import timezone
-from django.db.models import Count,Sum
+from django.db.models import Count,Sum,Q
 from rest_framework.response import Response
 # Create your views here.
 
 class AdminDashboardView(APIView):
+
+    """
+   API endpoint for managing dashboard in the project
+     - Allow only authenticated  admin view this dashboard
+     - In this dashboard show last_week_purchase, last_month_purchase
+     - See those 5 course who is sell more
+     - See top 5 student who is purchase course greater than any other student
+     - See last month sale
+     - see previous month sale
+   """
+
     permission_classes = [IsAdminOnlyDashboard]
 
     def get(self,request):
@@ -18,8 +29,12 @@ class AdminDashboardView(APIView):
         current_month_start=now.replace(day=1)
         previous_month_end = current_month_start - timedelta(seconds=1)  
         previous_month_start = previous_month_end.replace(day=1)
-        purchase_last_week = CoursePurchase.objects.filter(purchased_at__gte = last_week).count()
-        purchase_last_month = CoursePurchase.objects.filter(purchased_at__gte=last_month).count()
+        purchase = CoursePurchase.objects.aggregate(
+            last_week_count = Count('id',filter=Q(purchased_at__gte = last_week)),
+            last_month_count = Count('id',filter=Q(purchased_at__gte=last_month))
+        )
+        purchase_last_week = purchase['last_week_count']
+        purchase_last_month = purchase['last_month_count']
 
         most_purchased_course = CoursePurchase.objects.values('course__title').annotate(total=Count('course')).order_by('-total')[:5]
 
