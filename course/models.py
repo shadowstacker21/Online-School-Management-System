@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import User
-
+from cloudinary.models import CloudinaryField
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=200,unique=True)
@@ -12,6 +12,7 @@ class Department(models.Model):
 class Course(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    image=CloudinaryField('image',blank=True,null=True)
     department = models.ForeignKey(Department,on_delete=models.CASCADE,related_name='courses')
     teacher = models.ForeignKey(User,on_delete=models.CASCADE,limit_choices_to={'role':'teacher'},related_name='courses') 
     created_at = models.DateTimeField(auto_now_add=True)

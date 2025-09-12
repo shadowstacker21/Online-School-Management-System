@@ -6,7 +6,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     teacher_name = serializers.SerializerMethodField(method_name='get_teacher_name')
     class Meta:
         model = Course
-        fields = ['title','description','department','dept_name','teacher','teacher_name','price']
+        fields = ['title','description','image','department','dept_name','teacher','teacher_name','price']
         read_only_fields = ['teacher']
 
     def get_department_name(self,obj):
@@ -19,7 +19,7 @@ class AdminSerializer(serializers.ModelSerializer):
     teacher_name = serializers.SerializerMethodField(method_name='get_teacher_name')
     class Meta:
         model = Course
-        fields = ['title','description','department','dept_name','teacher','teacher_name','price']
+        fields = ['title','description','image','department','dept_name','teacher','teacher_name','price']
 
     def get_department_name(self,obj):
         return obj.department.name if obj.department else None
@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
     teacher_name = serializers.SerializerMethodField(method_name='get_teacher_name')
     class Meta:
         model = Course
-        fields = ['title','description','department','dept_name','teacher','teacher_name','price']
+        fields = ['title','description','image','department','dept_name','teacher','teacher_name','price']
         read_only_fields = fields
 
     def get_department_name(self,obj):
