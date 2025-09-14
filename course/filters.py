@@ -6,7 +6,7 @@ class CourseFilter(FilterSet):
     class Meta:
         model = Course
         fields = {
-            'department__name': ['exact'],
-            'title':['exact'],
+            'department__name': ['exact','icontains'],
+            'title':['exact','icontains'],
             
         }
