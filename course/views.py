@@ -24,7 +24,7 @@ class CourseViewSet(ModelViewSet):
     permission_classes = [IsAdminOrTeacherOwner]
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend,SearchFilter]
-    search_field = ['department__name','title']
+    search_fields = ['department__name','title']
     filterset_class =  CourseFilter
 
     def get_serializer_class(self):

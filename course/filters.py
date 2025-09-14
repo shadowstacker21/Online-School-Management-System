@@ -7,6 +7,5 @@ class CourseFilter(FilterSet):
         model = Course
         fields = {
             'department__name': ['exact','icontains'],
-            'title':['exact','icontains'],
             
         }
