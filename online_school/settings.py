@@ -231,3 +231,7 @@ SWAGGER_SETTINGS = {
       }
    }
 }
+
+
+BACKEND_URL = config("BACKEND_URL")
+FRONTEND_URL=config("FRONTEND_URL")
