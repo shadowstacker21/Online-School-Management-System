@@ -171,12 +171,12 @@ def payment_success(request):
     except (IndexError, CoursePurchase.DoesNotExist):
         return Response({"error": "Invalid transaction or order not found"}, status=404)
     
-    return redirect(f"{main_settings.FRONTEND_URL}/dashboard/purchase")
+    return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
 @api_view(['POST'])
 def payment_cancel(request):
-    return redirect(f"{main_settings.FRONTEND_URL}/dashboard/purchase")
+    return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
 @api_view(['POST'])
 def payment_fail(request):
-    return redirect(f"{main_settings.FRONTEND_URL}/dashboard/purchase")
+    return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
