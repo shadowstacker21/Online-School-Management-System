@@ -157,9 +157,9 @@ def payment_initiate(request):
 
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def payment_success(request):
-    tran_id = request.data.get("tran_id")
+    tran_id = request.GET.get("tran_id")
     if not tran_id:
         return Response({"error": "Transaction ID not provided"}, status=400)
 
@@ -173,10 +173,10 @@ def payment_success(request):
     
     return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
-@api_view(['POST'])
+@api_view(['GET'])
 def payment_cancel(request):
     return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
-@api_view(['POST'])
+@api_view(['GET'])
 def payment_fail(request):
     return redirect(f"{main_settings.FRONTEND_URL}/dashboard")
