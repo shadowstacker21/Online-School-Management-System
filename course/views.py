@@ -8,11 +8,12 @@ from course.paginatons import DefaultPagination
 from course.filters import CourseFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-from rest_framework.decorators import api_view,action
+from rest_framework.decorators import api_view 
 from sslcommerz_lib import SSLCOMMERZ 
 from rest_framework import status
 import uuid
 from django.conf import settings as main_settings
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -94,7 +95,9 @@ class CoursePurchaseView(ModelViewSet):
 
     
     def perform_create(self, serializer):
-        serializer.save(student=self.request.user)
+        course_id = self.kwargs.get("course_pk")  
+        course = get_object_or_404(Course, pk=course_id)
+        serializer.save(student=self.request.user, course=course)
 
 
 
