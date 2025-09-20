@@ -14,6 +14,7 @@ from rest_framework import status
 import uuid
 from django.conf import settings as main_settings
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 # Create your views here.
 
 
@@ -97,6 +98,9 @@ class CoursePurchaseView(ModelViewSet):
     def perform_create(self, serializer):
         course_id = self.kwargs.get("course_pk")  
         course = get_object_or_404(Course, pk=course_id)
+        student = self.request.user
+        if CoursePurchase.objects.filter(student=student,course=course).exists():
+            raise serializers.ValidationError('You have already purchase this course')
         serializer.save(student=self.request.user, course=course)
 
 

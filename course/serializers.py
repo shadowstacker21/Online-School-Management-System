@@ -62,13 +62,11 @@ class CoursePurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoursePurchase
         fields = ['id','student_email','student_name','course','course_title','purchased_at']
-        read_only_fields = ['id','student_email','student_name','course_title']
+        read_only_fields = ['id','student_email','student_name','course','course_title']
 
     def create(self,validated_data):
         student = self.context['request'].user
-        course = validated_data['course']
-        if CoursePurchase.objects.filter(student=student,course=course).exists():
-            raise serializers.ValidationError('You have already purchase this course')
+        
         validated_data['student'] = student
         return super().create(validated_data)
        
