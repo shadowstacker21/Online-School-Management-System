@@ -29,6 +29,7 @@ class AdminSerializer(serializers.ModelSerializer):
         return obj.teacher.get_full_name() if obj.teacher else None
     
 class UserSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     dept_name = serializers.SerializerMethodField(method_name='get_department_name')
     teacher_name = serializers.SerializerMethodField(method_name='get_teacher_name')
     class Meta:
