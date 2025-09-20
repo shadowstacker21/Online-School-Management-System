@@ -121,7 +121,8 @@ def my_purchases(request):
 def payment_initiate(request):
     user = request.user
     amount = request.data.get("amount")
-    tran_id = f"txn_{uuid.uuid4().hex[:12]}"
+    purchase_id=request.data.get('purchase_id')
+    tran_id = f"txn-{purchase_id}_{uuid.uuid4().hex[:12]}"
      
     settings = { 'store_id': 'onlin68cd85b49854a', 
                 'store_pass': 'onlin68cd85b49854a@ssl', 
@@ -160,11 +161,12 @@ def payment_initiate(request):
 @api_view(['POST'])
 def payment_success(request):
     tran_id = request.data.get("tran_id")
+   
     if not tran_id:
         return Response({"error": "Transaction ID not provided"}, status=400)
 
     try:
-        purchase_id = tran_id.split('_')[1]
+        purchase_id = int(tran_id.split('-')[1].split('_')[0])
         order = CoursePurchase.objects.get(id=purchase_id)
         order.status = "Paid"
         order.save()
