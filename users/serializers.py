@@ -17,7 +17,7 @@ class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         model = BaseUserSerializer.Meta.model
         ref_name = 'CustomUser'
-        fields = ['id','email','profile_picture','first_name','last_name','address','phone_number']
+        fields = ['id','email','role','profile_picture','first_name','last_name','address','phone_number']
 
 class RoleChangeSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES)
