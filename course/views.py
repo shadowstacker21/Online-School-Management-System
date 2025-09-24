@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from course.serializers import CreateCourseSerializer,CoursePurchaseSerializer,CreateDepartMentSerializerUserOrTeacher,AdminSerializer,UserSerializer,CreateDepartMentSerializer
 from rest_framework.viewsets import ModelViewSet
 from course.models import Course,Department,CoursePurchase
-from api.permissions import IsAdminOrTeacherOwner,IsAdminOnly,IsAdminOrStudentPurchase
+from api.permissions import IsAdminOrTeacherOwner,IsAdminOrReadOnly,IsAdminOnly,IsAdminOrStudentPurchase
 from course.paginatons import DefaultPagination
 from course.filters import CourseFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -68,7 +68,7 @@ class DepartmentView(ModelViewSet):
      
    """
     queryset = Department.objects.all()
-    permission_classes = [IsAdminOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_serializer_class(self):
        if self.request.user.role == 'admin':

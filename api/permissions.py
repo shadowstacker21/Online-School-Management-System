@@ -34,6 +34,14 @@ class IsAdminOnly(permissions.BasePermission):
         return False
         # return request.user.is_authenticated and request.user.role == 'admin'
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+  
+    def has_permission(self, request, view):
+        if request.user.role == "admin":
+            return True
+        return request.method in permissions.SAFE_METHODS
+
+
 class IsAdminOrStudentPurchase(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user  
