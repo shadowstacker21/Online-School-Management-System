@@ -24,4 +24,4 @@ class RoleChangeSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES,read_only=True)
     class Meta:
         model = User
-        fields = ['id','role']
+        fields = ['id','role','first_name','last_name']
