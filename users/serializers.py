@@ -14,13 +14,14 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
 class UserSerializer(BaseUserSerializer):
     profile_picture = serializers.ImageField(required=False)
+    role = serializers.ChoiceField(choices=User.ROLE_CHOICES)
     class Meta(BaseUserSerializer.Meta):
         model = BaseUserSerializer.Meta.model
         ref_name = 'CustomUser'
         fields = ['id','email','role','profile_picture','first_name','last_name','address','phone_number']
 
 class RoleChangeSerializer(serializers.ModelSerializer):
-    role = serializers.ChoiceField(choices=User.ROLE_CHOICES)
+    role = serializers.ChoiceField(choices=User.ROLE_CHOICES,read_only=True)
     class Meta:
         model = User
         fields = ['id','role']
