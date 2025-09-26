@@ -63,10 +63,10 @@ class AdminDashboardView(APIView):
 
         return Response(
            {
-               " purchase_last_week":purchase_last_week,
+               "purchase_last_week":purchase_last_week,
                 "purchase_last_month":purchase_last_month,
                 "most_purchased_course":most_purchased_course,
-               " most_buy_student":most_buy_student,
+               "most_buy_student":most_buy_student,
                "Sales":{
                    "current_month_sale":current_month_sale,
                    "previous_month_sale":previous_month_sale,
