@@ -6,6 +6,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Count,Sum,Q
 from rest_framework.response import Response
+from users.models import User
 # Create your views here.
 
 class AdminDashboardView(APIView):
@@ -63,12 +64,17 @@ class AdminDashboardView(APIView):
             CoursePurchase.objects.filter(status='Paid').aggregate(total=Sum('course__price'))['total'] or 0
         )
 
+
+        active_users_count = User.objects.filter(is_active=True).count()
+
+
         return Response(
            {
                "purchase_last_week":purchase_last_week,
                 "purchase_last_month":purchase_last_month,
                 "most_purchased_course":most_purchased_course,
                "most_buy_student":most_buy_student,
+              "active_users":active_users_count,
                "Sales":{
                    "current_month_sale":current_month_sale,
                    "previous_month_sale":previous_month_sale,
