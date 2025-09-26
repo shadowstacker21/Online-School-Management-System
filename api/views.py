@@ -29,24 +29,26 @@ class AdminDashboardView(APIView):
         current_month_start=now.replace(day=1)
         previous_month_end = current_month_start - timedelta(seconds=1)  
         previous_month_start = previous_month_end.replace(day=1)
-        purchase = CoursePurchase.objects.aggregate(
+        purchase = CoursePurchase.objects.filter(status='PAID').aggregate(
             last_week_count = Count('id',filter=Q(purchased_at__gte = last_week)),
             last_month_count = Count('id',filter=Q(purchased_at__gte=last_month))
         )
         purchase_last_week = purchase['last_week_count']
         purchase_last_month = purchase['last_month_count']
 
-        most_purchased_course = CoursePurchase.objects.values('course__title').annotate(total=Count('course')).order_by('-total')[:5]
+        most_purchased_course = CoursePurchase.objects.filter(status='PAID').values('course__title').annotate(total=Count('course')).order_by('-total')[:5]
 
-        most_buy_student = CoursePurchase.objects.values('student__id','student__email').annotate(total=Count('id')).order_by('-total')[:5]
+        most_buy_student = CoursePurchase.objects.filter(status='PAID').values('student__id','student__email').annotate(total=Count('id')).order_by('-total')[:5]
 
         current_month_sale = CoursePurchase.objects.filter(
+            status='PAID',
             purchased_at__gte =previous_month_start
                                                             
         ).aggregate(total=Sum('course__price'))['total'] or 0
 
 
         previous_month_sale = CoursePurchase.objects.filter(
+            status='PAID',
             purchased_at__gte =previous_month_start,
             purchased_at__lt = current_month_start
         ).aggregate(total=Sum('course__price'))['total'] or 0
@@ -58,7 +60,7 @@ class AdminDashboardView(APIView):
 
        
         total_revenue = (
-            CoursePurchase.objects.aggregate(total=Sum('course__price'))['total'] or 0
+            CoursePurchase.objects.filter(status='PAID').aggregate(total=Sum('course__price'))['total'] or 0
         )
 
         return Response(
