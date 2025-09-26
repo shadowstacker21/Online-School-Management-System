@@ -51,6 +51,16 @@ class AdminDashboardView(APIView):
             purchased_at__lt = current_month_start
         ).aggregate(total=Sum('course__price'))['total'] or 0
 
+        if previous_month_sale > 0:
+            sales_growth = round(((current_month_sale - previous_month_sale) / previous_month_sale) * 100, 2)
+        else:
+            sales_growth = 0
+
+       
+        total_revenue = (
+            CoursePurchase.objects.aggregate(total=Sum('course__price'))['total'] or 0
+        )
+
         return Response(
            {
                " purchase_last_week":purchase_last_week,
@@ -59,7 +69,9 @@ class AdminDashboardView(APIView):
                " most_buy_student":most_buy_student,
                "Sales":{
                    "current_month_sale":current_month_sale,
-                   "previous_month_sale":previous_month_sale
+                   "previous_month_sale":previous_month_sale,
+                    "sales_growth_percent": sales_growth,
+                    "total_revenue": total_revenue
                }
            }
 
