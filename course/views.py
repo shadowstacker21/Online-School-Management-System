@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from rest_framework.response import Response
-from course.serializers import CreateCourseSerializer,CoursePurchaseSerializer,CreateDepartMentSerializerUserOrTeacher,AdminSerializer,UserSerializer,CreateDepartMentSerializer
-from rest_framework.viewsets import ModelViewSet
+from course.serializers import TeacherCourseSerializer,CreateCourseSerializer,CoursePurchaseSerializer,CreateDepartMentSerializerUserOrTeacher,AdminSerializer,UserSerializer,CreateDepartMentSerializer
+from rest_framework.viewsets import ModelViewSet,ReadOnlyModelViewSet
 from course.models import Course,Department,CoursePurchase
 from api.permissions import IsAdminOrTeacherOwner,IsAdminOrReadOnly,IsAdminOnly,IsAdminOrStudentPurchase
 from course.paginatons import DefaultPagination
@@ -15,6 +15,8 @@ import uuid
 from django.conf import settings as main_settings
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count
 # Create your views here.
 
 
@@ -56,6 +58,29 @@ class CourseViewSet(ModelViewSet):
 
         elif self.request.user.role == 'admin':
             serializer.save()
+
+
+class TeacherCourseView(ReadOnlyModelViewSet):
+    """
+    API endpoint that allows teachers to 
+    view their courses and 
+    their student count
+    """
+
+    serializer_class=TeacherCourseSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        user=self.request.user
+        if user.role != 'teacher':
+            return Course.objects.none()
+        
+        return Course.objects.filter(teacher=user).annotate(
+            student_count = Count('purchases')
+        ).select_related('department','teacher')
+
+
+
 
 
 

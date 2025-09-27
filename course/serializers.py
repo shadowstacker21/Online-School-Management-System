@@ -73,4 +73,9 @@ class CoursePurchaseSerializer(serializers.ModelSerializer):
        
     
 
-        
+class TeacherCourseSerializer(serializers.ModelSerializer):
+    student_count=serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model=Course
+        fields=['id','title','department','student_count']
