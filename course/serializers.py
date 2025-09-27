@@ -75,7 +75,10 @@ class CoursePurchaseSerializer(serializers.ModelSerializer):
 
 class TeacherCourseSerializer(serializers.ModelSerializer):
     student_count=serializers.IntegerField(read_only=True)
-
+    dept_name = serializers.SerializerMethodField(method_name='get_department_name')
     class Meta:
         model=Course
-        fields=['id','title','department','student_count']
+        fields=['id','title','department','dept_name','student_count']
+
+    def get_department_name(self,obj):
+        return obj.department.name if obj.department else None
